@@ -1,0 +1,2 @@
+recursive-include python *.so
+recursive-include python *.py

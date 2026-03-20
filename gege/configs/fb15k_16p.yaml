@@ -1,0 +1,58 @@
+model:
+  learning_task: LINK_PREDICTION
+  encoder:
+    layers:
+      - - type: EMBEDDING
+          output_dim: 100
+  decoder:
+    type: DISTMULT
+    options:
+      input_dim: 100
+  loss:
+    type: SOFTMAX_CE
+    options:
+      reduction: SUM
+  dense_optimizer:
+      type: ADAM
+      options:
+        learning_rate: 0.1
+  sparse_optimizer:
+      type: ADAGRAD
+      options:
+        learning_rate: 0.1
+storage:
+  device_type: cuda
+  device_ids: [0]
+  dataset:
+    dataset_dir: ./datasets/fb15k_16p
+  edges:
+    type: HOST_MEMORY
+    options:
+      dtype: int
+  embeddings:
+    type: MEM_PARTITION_BUFFER
+    options:
+      num_partitions: 16
+      buffer_capacity: 4
+      prefetching: false
+      fine_to_coarse_ratio: 1
+      num_cache_partitions: 0
+      edge_bucket_ordering: CUSTOM
+      randomly_assign_edge_buckets: false
+  prefetch: false
+  save_model: false
+training:
+  batch_size: 10000
+  negative_sampling_method: RNS
+  negative_sampling:
+    num_chunks: 10
+    negatives_per_positive: 1000
+    degree_fraction: 0.5
+    filtered: false
+  num_epochs: 5
+  epochs_per_shuffle: 1
+evaluation:
+  epochs_per_eval: 5
+  batch_size: 1000
+  negative_sampling:
+    filtered: true

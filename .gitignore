@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.DS_Store
+*.log
+
+# Generated build output
+build*
+**/build*
+
+# Profiling output
+profiles/
+**/profiles/
+
+# Dataset and raw data
+data/
+datasets/
+**/data/
+**/datasets/

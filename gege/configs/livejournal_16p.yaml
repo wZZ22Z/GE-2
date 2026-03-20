@@ -1,0 +1,61 @@
+model:
+  random_seed: 5650194872900178194
+  learning_task: LINK_PREDICTION
+  encoder:
+    layers:
+      - - type: EMBEDDING
+          output_dim: 100
+  decoder:
+    type: DISTMULT
+    options:
+      input_dim: 100
+  loss:
+    type: SOFTMAX_CE
+    options:
+      reduction: SUM
+  dense_optimizer:
+      type: ADAGRAD
+      options:
+        learning_rate: 0.1
+  sparse_optimizer:
+      type: ADAGRAD
+      options:
+        learning_rate: 0.1
+storage:
+  device_type: cuda
+  device_ids: [0,1]
+  dataset:
+    dataset_dir: ./datasets/livejournal_16p
+  edges:
+    type: HOST_MEMORY
+  embeddings:
+    type: MEM_PARTITION_BUFFER
+    options:
+      num_partitions: 16
+      buffer_capacity: 4
+      prefetching: false
+      fine_to_coarse_ratio: 1
+      num_cache_partitions: 0
+      edge_bucket_ordering: CUSTOM
+      randomly_assign_edge_buckets: false
+  prefetch: false
+  save_model: false
+training:
+  batch_size: 50000
+  negative_sampling_method: RNS
+  negative_sampling_selected_ratio: 0.1
+  negative_sampling:
+    num_chunks: 50
+    negatives_per_positive: 1000
+    degree_fraction: 0.0
+    filtered: false
+  num_epochs: 10
+  epochs_per_shuffle: 1
+evaluation:
+  epochs_per_eval: 10
+  batch_size: 1000
+  negative_sampling:
+    num_chunks: 1
+    negatives_per_positive: 10000
+    degree_fraction: 0.0
+    filtered: false

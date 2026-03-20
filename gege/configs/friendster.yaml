@@ -1,0 +1,48 @@
+model:
+  learning_task: LINK_PREDICTION
+  encoder:
+    layers:
+      - - type: EMBEDDING
+          output_dim: 100
+  decoder:
+    type: DISTMULT
+    options:
+      input_dim: 100
+  loss:
+    type: SOFTMAX_CE
+    options:
+      reduction: SUM
+  dense_optimizer:
+      type: ADAM
+      options:
+        learning_rate: 0.1
+  sparse_optimizer:
+      type: ADAGRAD
+      options:
+        learning_rate: 0.1
+storage:
+  device_type: cuda
+  dataset:
+    dataset_dir: ./datasets/friendster
+  edges:
+    type: HOST_MEMORY
+  embeddings:
+    type: HOST_MEMORY
+  save_model: false
+training:
+  batch_size: 10000
+  negative_sampling_method: DNS
+  negative_sampling:
+    num_chunks: 10
+    negatives_per_positive: 1000
+    degree_fraction: 0.0
+    filtered: false
+  num_epochs: 10
+  epochs_per_shuffle: 1
+evaluation:
+  batch_size: 1000
+  negative_sampling:
+    num_chunks: 1
+    negatives_per_positive: 10000
+    degree_fraction: 0.0
+    filtered: false
