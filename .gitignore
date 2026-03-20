@@ -15,6 +15,6 @@ profiles/
 **/profiles/
 
 # Dataset and raw data
-
 datasets/
-
+!python/tools/preprocess/datasets/
+!python/tools/preprocess/datasets/**
